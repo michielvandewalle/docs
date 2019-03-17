@@ -1,0 +1,6 @@
+{
+  "docs": {
+    "Server setup": ["ubuntu-lamp","apache-virtual-hosts","apache-letsencrypt","git-bitbucket"],
+    "Frontend": ["frontend-gulp"]
+  }
+}
