@@ -11,6 +11,23 @@ Since we cannot run the both node.js and apache to listen the same port. we’ll
 
 ![apache-node-concept](https://redstapler.co/wp-content/uploads/2017/12/node-apache-same-server1.png)
 
+## Install Node & NPM
+
+To install, run the commands below
+
+```
+sudo apt install nodejs
+sudo apt install npm
+```
+
+After installing, both Node.js and NPM modules should be installed and ready to use.
+You can use the commands below to view the version number installed.
+
+```
+node -v
+npm -v
+```
+
 ## Setup
 
 First let’s start the node application to listen on port 3000.
@@ -40,7 +57,7 @@ var server = http.createServer(function(request, response) {
 
 });
 
-var port = 80;
+var port = 3000;
 server.listen(port);
 
 console.log("Server running at http://localhost:%d", port);
@@ -69,7 +86,6 @@ sudo nano  /etc/apache2/conf-available/vhost.conf
 ```
 
 You can change the /node to whatever url that you want to serve your node application
-
 Then, make sure that you have enable the mod_proxy and mod_proxy_http modules
 
 ```shell
@@ -77,6 +93,12 @@ sudo a2enmod proxy
 sudo a2enmod proxy_http
 sudo a2enmod proxy_balancer
 sudo a2enmod lbmethod_byrequests
+```
+
+Activate the new modules by restarting apache
+
+```
+sudo service apache2 restart
 ```
 
 ## Install PM2
