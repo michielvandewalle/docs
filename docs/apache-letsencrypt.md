@@ -31,3 +31,25 @@ sudo certbot --apache -d example.com -d www.example.com
 This runs certbot with the --apache plugin, using -d to specify the names you'd like the certificate to be valid for.
 
 If this is your first time running certbot, you will be prompted to enter an email address and agree to the terms of service. After doing so, certbot will communicate with the Let's Encrypt server, then run a challenge to verify that you control the domain you're requesting a certificate for.
+
+## Possible errors
+
+```
+ - Could not be found to be deleted /etc/apache2/conf-available/vhost-le-ssl.conf - Certbot probably shut down unexpectedly
+```
+
+The problem seems to be a RewriteCond without (commented out) a following RewriteRule.
+We'll need to improve our mod_rewrite rule parsing methods to fix this bug, so I'll change title of this issue accordingly to keep track of the process.
+
+To work around this, you can comment out the orphaned RewriteCond line from your configuration file. Sorry for the inconvinience.
+
+```
+<VirtualHost *:80>
+    ...
+RewriteEngine on
+RewriteCond %{SERVER_NAME} =domain.com
+#RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,QSA,R=permanent]
+</VirtualHost>
+```
+
+![Github Issue FIXED](https://github.com/certbot/certbot/issues/5255#issuecomment-346183223)
