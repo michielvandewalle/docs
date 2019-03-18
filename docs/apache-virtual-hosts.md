@@ -57,7 +57,7 @@ RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 Create a symlink as shown below to activate this conf file in apache `/etc/apache2/conf-enabled`
 
 ```shell
-$ sudo ln -s /etc/apache2/conf-available/vhost.conf /etc/apache2/conf-enabled/
+sudo ln -s /etc/apache2/conf-available/vhost.conf /etc/apache2/conf-enabled/
 ```
 
 Once the configuration is enabled test if the syntax is correct with
