@@ -95,6 +95,7 @@ Now, execute the following commands to adjust the PHP settings:
 
 ```shell
 sudo phpenmod mbstring
+sudo phpenmod mcrypt
 ```
 
 Finally, use the following command to restart the Apache server.
@@ -102,6 +103,8 @@ Finally, use the following command to restart the Apache server.
 ```shell
 sudo service apache2 restart
 ```
+
+If you having trouble login in to the mysql through phpMyAdmin. Probably has to do with one of these packages we just installed. Make sure they are enabled.
 
 Now, if you test your default web server page, you will get the content of the index.html file. However, we need to change it as we want to serve dynamic web pages using PHP components. To achieve this, you need to modify the dir.conf file using the following command.
 
