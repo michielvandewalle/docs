@@ -1,6 +1,6 @@
 ---
 id: commandline
-title: Commandline
+title: Command line
 ---
 
 # Tar
