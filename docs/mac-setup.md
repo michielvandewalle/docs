@@ -1,9 +1,9 @@
 ---
-id: setup-mac
-title: Setup mac
+id: mac-setup
+title: Mac setup
 ---
 
-# Mac Setup apps
+# Mac setup apps
 
 Run script this script to install apps with brew.
 

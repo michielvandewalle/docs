@@ -2,6 +2,7 @@
   "docs": {
     "Server setup": ["ubuntu-lamp","apache-virtual-hosts","apache-letsencrypt","git-bitbucket","apache-node", "apache-modules","composer"],
     "Frontend": ["frontend-gulp"],
-    "Command line": ["commandline"]
+    "Command line": ["commandline"],
+    "Mac setup": ["mac-setup"]
   }
 }
