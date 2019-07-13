@@ -202,3 +202,45 @@ pm2 monit
 ```
 
 Now your Node.js application is running, and managed by PM2.
+
+## Lets' Encrypt + node
+
+Check if following apache modules are active:
+
+```
+a2enmod rewrite
+a2enmod proxy_connect
+a2enmod ssl
+a2enmod proxy_http
+a2enmod headers
+a2enmod proxy_wstunnel
+a2enmod cgi
+```
+
+Create the SSL certificate for the domain.
+This will also create a `vhost-le-ssl.conf` config file in apache
+
+```
+sudo certbot --apache -d example.com
+```
+
+Edit the `vhost-le-ssl.conf` file
+
+```
+# sudo nano /etc/apache2/conf-available/vhost-le-ssl.conf
+
+  ServerName example.com
+  SSLProxyCheckPeerCN off
+  SSLProxyCheckPeerExpire off
+  SSLProxyCheckPeerName off
+  SSLProxyEngine On
+  SSLProxyVerify none
+  ProxyPreserveHost On
+  ProxyPass /myapp http://127.0.0.1:8080/myapp
+  ProxyPassReverse /myapp http://127.0.0.1:8080/myapp
+  RequestHeader set X-Forwarded-Proto https
+  SSLCertificateFile /etc/letsencrypt/live/example.com/fullchain.pem
+  SSLCertificateKeyFile /etc/letsencrypt/live/example.com/privkey.pem
+  Include /etc/letsencrypt/options-ssl-apache.conf
+
+```
