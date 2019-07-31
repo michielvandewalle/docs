@@ -34,19 +34,18 @@ brew instal npm
 brew cask install firefox
 brew cask install visual-studio-code
 
-brew cask install harvest
-brew cask install sourcetree
+brew cask install fork
 brew cask install sequel-pro
 brew cask install graphiql
 brew cask install vlc
 brew cask install postman
 brew cask install kap
+brew install duck
+
 
 brew cask install sketch
-brew cask install adobe-creative-cloud
-brew install imagemagick
-
 brew cask install virtualbox
+brew install docker docker-machine
 
 echo "alias sshkey='pbcopy < ~/.ssh/id_rsa.pub'" >> ~/.bash_profile
 ```
