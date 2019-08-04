@@ -47,5 +47,7 @@ brew cask install sketch
 brew cask install virtualbox
 brew install docker docker-machine
 
+brew install tree
+
 echo "alias sshkey='pbcopy < ~/.ssh/id_rsa.pub'" >> ~/.bash_profile
 ```
