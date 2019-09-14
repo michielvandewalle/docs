@@ -32,6 +32,14 @@ This runs certbot with the --apache plugin, using -d to specify the names you'd 
 
 If this is your first time running certbot, you will be prompted to enter an email address and agree to the terms of service. After doing so, certbot will communicate with the Let's Encrypt server, then run a challenge to verify that you control the domain you're requesting a certificate for.
 
+
+### Steps to generate wildcard certificate
+
+```shell
+sudo certbot certonly --manual -d *.example.com --agree-tos --no-bootstrap --manual-public-ip-logging-ok --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory
+```
+
+
 ## Possible errors
 
 ```
