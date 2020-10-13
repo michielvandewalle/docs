@@ -1,0 +1,214 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Node.js on Apache Server · Docs</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="use reverse proxy technique to make apache be able to run node.js application on the same server"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Node.js on Apache Server · Docs"/><meta property="og:type" content="website"/><meta property="og:url" content="https://github.com/michielvandewalle/docs/"/><meta property="og:description" content="use reverse proxy technique to make apache be able to run node.js application on the same server"/><meta property="og:image" content="https://github.com/michielvandewalle/docs/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://github.com/michielvandewalle/docs/img/docusaurus.png"/><link rel="shortcut icon" href="/docs/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="/css/code-block-buttons.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script><script type="text/javascript" src="/js/code-block-buttons.js"></script><script src="/docs/js/scrollSpy.js"></script><link rel="stylesheet" href="/docs/css/main.css"/><script src="/docs/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/docs/"><img class="logo" src="/docs/img/docusaurus.svg" alt="Docs"/><h2 class="headerTitleWithLogo">Docs</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"></ul></nav></div></header></div></div><div class="navPusher singleRowMobileNav"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Server setup</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Server setup</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/docs/ubuntu-lamp">LAMP stack</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/apache-virtual-hosts">Setup Apache Virtual Hosts</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/apache-letsencrypt">SSL with Let&#x27;s Encrypt</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/git-bitbucket">Git &amp; Bitbucket</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs/docs/apache-node">Node.js on Apache Server</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/apache-modules">Load essential apache modules</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/composer">Composer</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Frontend</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/docs/frontend-gulp">Frontend workflow</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Command line</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/docs/commandline">Command line</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Mac setup</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/docs/mac-setup">Mac setup</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Node.js on Apache Server</h1></header><article><div><span><p>use reverse proxy technique to make apache be able to run node.js application on the same server</p>
+<h2><a class="anchor" aria-hidden="true" id="concept"></a><a href="#concept" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Concept</h2>
+<p>Since we cannot run the both node.js and apache to listen the same port. we’ll to config apache to act like a reverse proxy and pass the request to node.js application for a specific url. For example, if you already have Apache server running on localhost and want to run Node.js app on localhost/node, the flow should looks like this</p>
+<p><img src="https://redstapler.co/wp-content/uploads/2017/12/node-apache-same-server1.png" alt="apache-node-concept"></p>
+<h2><a class="anchor" aria-hidden="true" id="install-node--npm"></a><a href="#install-node--npm" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Install Node &amp; NPM</h2>
+<p>To install, run the commands below</p>
+<pre><code class="hljs">sudo apt <span class="hljs-keyword">install</span> nodejs
+sudo apt <span class="hljs-keyword">install</span> npm
+</code></pre>
+<p>After installing, both Node.js and NPM modules should be installed and ready to use.
+You can use the commands below to view the version number installed.</p>
+<pre><code class="hljs"><span class="hljs-keyword">node</span> <span class="hljs-title">-v</span>
+npm -v
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="setup"></a><a href="#setup" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Setup</h2>
+<p>First let’s start the node application to listen on port 3000.</p>
+<p>Create a file package.json</p>
+<pre><code class="hljs css language-json">{
+  <span class="hljs-attr">"name"</span>: <span class="hljs-string">"nodejs-hello-world"</span>,
+  <span class="hljs-attr">"version"</span>: <span class="hljs-string">"1.0.0"</span>,
+  <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Hello World sample app"</span>,
+  <span class="hljs-attr">"main"</span>: <span class="hljs-string">"index.js"</span>,
+  <span class="hljs-attr">"scripts"</span>: {
+    <span class="hljs-attr">"start"</span>: <span class="hljs-string">"node index.js"</span>,
+    <span class="hljs-attr">"test"</span>: <span class="hljs-string">"echo \"Error: no test specified\" &amp;&amp; exit 1"</span>
+  }
+}
+</code></pre>
+<p>Create a file index.js</p>
+<pre><code class="hljs css language-javascript"><span class="hljs-keyword">var</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>);
+
+<span class="hljs-keyword">var</span> server = http.createServer(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">request, response</span>) </span>{
+
+    response.writeHead(<span class="hljs-number">200</span>, {<span class="hljs-string">"Content-Type"</span>: <span class="hljs-string">"text/plain"</span>});
+    response.end(<span class="hljs-string">"Hello World!"</span>);
+
+});
+
+<span class="hljs-keyword">var</span> port = <span class="hljs-number">3000</span>;
+server.listen(port);
+
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Server running at http://localhost:%d"</span>, port);
+</code></pre>
+<p>This is the simple app to listen for http request using Express and return a simple text which you will be able to see it on browser if you navigate to localhost:3000</p>
+<p><img src="https://redstapler.co/wp-content/uploads/2017/12/node-apache-same-server2.png" alt="node-app-hello-world"></p>
+<p>Next we will make the Apache reroute the request by using proxypass directive. Just head to httpd.conf file and add</p>
+<pre><code class="hljs css language-shell">ProxyPass /node http://localhost:3000/
+</code></pre>
+<p>Reroute node for a subdomain like node.yourdomainname.be, add a Virtualhost in vhost.conf</p>
+<pre><code class="hljs css language-shell">sudo nano  /etc/apache2/conf-available/vhost.conf
+</code></pre>
+<pre><code class="hljs"><span class="hljs-tag">&lt;VirtualHost *:80&gt;</span>
+    ServerName <span class="hljs-keyword">node</span>.<span class="hljs-title">michielvandewalle</span>.com
+    ProxyPass / http://localhost:<span class="hljs-number">3000</span>/
+    ProxyPassReverse / http://localhost:<span class="hljs-number">3000</span>/
+<span class="hljs-tag">&lt;/VirtualHost&gt;</span>
+</code></pre>
+<p>You can change the /node to whatever url that you want to serve your node application
+Then, make sure that you have enable the mod_proxy and mod_proxy_http modules</p>
+<pre><code class="hljs css language-shell">sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo a2enmod proxy_balancer
+sudo a2enmod lbmethod_byrequests
+</code></pre>
+<p>Activate the new modules by restarting apache</p>
+<pre><code class="hljs">sudo<span class="hljs-built_in"> service </span>apache2 restart
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="install-pm2"></a><a href="#install-pm2" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Install PM2</h2>
+<p>Now we will install PM2, which is a process manager for Node.js applications. PM2 provides an easy way to manage and daemonize applications (run them in the background as a service).</p>
+<p>We will use npm, a package manager for Node modules that installs with Node.js, to install PM2 on our server. Use this command to install PM2:</p>
+<pre><code class="hljs css language-shell">sudo npm install -g pm2
+</code></pre>
+<p>The <code>-g</code> option tells <code>npm</code> to install the module globally, so that it's available system-wide.</p>
+<h3><a class="anchor" aria-hidden="true" id="start-application"></a><a href="#start-application" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Start Application</h3>
+<p>The first thing you will want to do is use the pm2 start command to run your application, hello.js, in the background:</p>
+<pre><code class="hljs css language-shell">pm2 start hello.js
+</code></pre>
+<p>This also adds your application to PM2's process list, which is outputted every time you start an application:</p>
+<pre><code class="hljs">Output
+[PM2] Spawning PM2 daemon
+[PM2] PM2 Successfully daemonized
+[PM2] Starting hello.js <span class="hljs-keyword">in</span> fork_mode (<span class="hljs-number">1</span> instance)
+[PM2] Done.
+┌──────────┬────┬──────┬──────┬────────┬─────────┬────────┬─────────────┬──────────┐
+│ App <span class="hljs-built_in">name</span> │ <span class="hljs-built_in">id</span> │ mode │ pid  │ status │ restart │ uptime │ memory      │ watching │
+├──────────┼────┼──────┼──────┼────────┼─────────┼────────┼─────────────┼──────────┤
+│ hello    │ <span class="hljs-number">0</span>  │ fork │ <span class="hljs-number">3524</span> │ online │ <span class="hljs-number">0</span>       │ <span class="hljs-number">0</span>s     │ <span class="hljs-number">21.566</span> MB   │ disabled │
+└──────────┴────┴──────┴──────┴────────┴─────────┴────────┴─────────────┴──────────┘
+ Use `pm2 show &lt;<span class="hljs-built_in">id</span>|<span class="hljs-built_in">name</span>&gt;` <span class="hljs-keyword">to</span> <span class="hljs-keyword">get</span> more details <span class="hljs-keyword">about</span> an app
+</code></pre>
+<p>As you can see, PM2 automatically assigns an App name (based on the filename, without the .js extension) and a PM2 id. PM2 also maintains other information, such as the PID of the process, its current status, and memory usage.</p>
+<p>Applications that are running under PM2 will be restarted automatically if the application crashes or is killed, but an additional step needs to be taken to get the application to launch on system startup (boot or reboot). Luckily, PM2 provides an easy way to do this, the startup subcommand.</p>
+<p>The startup subcommand generates and configures a startup script to launch PM2 and its managed processes on server boots:</p>
+<pre><code class="hljs css language-shell">pm2 startup systemd
+</code></pre>
+<p>The last line of the resulting output will include a command that you must run with superuser privileges:</p>
+<pre><code class="hljs css language-shell">Output
+[PM2] Init System found: systemd
+[PM2] You have to run this command as root. Execute the following command:
+sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u sammy --hp /home/sammy
+</code></pre>
+<p>Run the command that was generated (similar to the highlighted output above, but with your username instead of sammy) to set PM2 up to start on boot (use the command from your own output):</p>
+<pre><code class="hljs">sudo env PATH=$<span class="hljs-symbol">PATH:</span>/usr/bin /usr/<span class="hljs-class"><span class="hljs-keyword">lib</span>/<span class="hljs-title">node_modules</span>/<span class="hljs-title">pm2</span>/<span class="hljs-title">bin</span>/<span class="hljs-title">pm2</span> <span class="hljs-title">startup</span> <span class="hljs-title">systemd</span> -<span class="hljs-title">u</span> <span class="hljs-title">sammy</span> --<span class="hljs-title">hp</span> /<span class="hljs-title">home</span>/<span class="hljs-title">sammy</span></span>
+</code></pre>
+<p>This will create a systemd unit which runs pm2 for your user on boot. This pm2 instance, in turn, runs hello.js. You can check the status of the systemd unit with systemctl:</p>
+<pre><code class="hljs">systemctl <span class="hljs-keyword">status</span> pm2-sammy
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="other-pm2-usage"></a><a href="#other-pm2-usage" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Other PM2 Usage</h3>
+<p>PM2 provides many subcommands that allow you to manage or look up information about your applications. Note that running pm2 without any arguments will display a help page, including example usage, that covers PM2 usage in more detail than this section of the tutorial.</p>
+<p>Stop an application with this command (specify the PM2 App name or id):</p>
+<pre><code class="hljs">pm2 <span class="hljs-built_in">stop</span> app_name_or_id
+</code></pre>
+<p>Restart an application with this command (specify the PM2 App name or id):</p>
+<pre><code class="hljs">pm2 <span class="hljs-built_in">restart</span> app_name_or_id
+</code></pre>
+<p>The list of applications currently managed by PM2 can also be looked up with the list subcommand:</p>
+<pre><code class="hljs">pm2 <span class="hljs-built_in">list</span>
+</code></pre>
+<p>More information about a specific application can be found by using the info subcommand (specify the PM2 App name or id):</p>
+<pre><code class="hljs"><span class="hljs-attribute">pm2</span> <span class="hljs-literal">info</span> example
+</code></pre>
+<p>The PM2 process monitor can be pulled up with the monit subcommand. This displays the application status, CPU, and memory usage:</p>
+<pre><code class="hljs"><span class="hljs-attribute">pm2</span> monit
+</code></pre>
+<p>Now your Node.js application is running, and managed by PM2.</p>
+<h2><a class="anchor" aria-hidden="true" id="lets-encrypt--node"></a><a href="#lets-encrypt--node" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Lets' Encrypt + node</h2>
+<p>Check if following apache modules are active:</p>
+<pre><code class="hljs"><span class="hljs-attr">a2enmod</span> <span class="hljs-string">rewrite</span>
+<span class="hljs-attr">a2enmod</span> <span class="hljs-string">proxy_connect</span>
+<span class="hljs-attr">a2enmod</span> <span class="hljs-string">ssl</span>
+<span class="hljs-attr">a2enmod</span> <span class="hljs-string">proxy_http</span>
+<span class="hljs-attr">a2enmod</span> <span class="hljs-string">headers</span>
+<span class="hljs-attr">a2enmod</span> <span class="hljs-string">proxy_wstunnel</span>
+<span class="hljs-attr">a2enmod</span> <span class="hljs-string">cgi</span>
+</code></pre>
+<p>Create the SSL certificate for the domain.
+This will also create a <code>vhost-le-ssl.conf</code> config file in apache</p>
+<pre><code class="hljs">sudo certbot <span class="hljs-comment">--apache -d example.com</span>
+</code></pre>
+<p>Edit the <code>vhost-le-ssl.conf</code> file</p>
+<pre><code class="hljs"><span class="hljs-comment"># sudo nano /etc/apache2/conf-available/vhost-le-ssl.conf</span>
+
+  <span class="hljs-attr">ServerName</span> <span class="hljs-string">example.com</span>
+  <span class="hljs-attr">SSLProxyCheckPeerCN</span> <span class="hljs-string">off</span>
+  <span class="hljs-attr">SSLProxyCheckPeerExpire</span> <span class="hljs-string">off</span>
+  <span class="hljs-attr">SSLProxyCheckPeerName</span> <span class="hljs-string">off</span>
+  <span class="hljs-attr">SSLProxyEngine</span> <span class="hljs-string">On</span>
+  <span class="hljs-attr">SSLProxyVerify</span> <span class="hljs-string">none</span>
+  <span class="hljs-attr">ProxyPreserveHost</span> <span class="hljs-string">On</span>
+  <span class="hljs-attr">ProxyPass</span> <span class="hljs-string">/myapp http://127.0.0.1:8080/myapp</span>
+  <span class="hljs-attr">ProxyPassReverse</span> <span class="hljs-string">/myapp http://127.0.0.1:8080/myapp</span>
+  <span class="hljs-attr">RequestHeader</span> <span class="hljs-string">set X-Forwarded-Proto https</span>
+  <span class="hljs-attr">SSLCertificateFile</span> <span class="hljs-string">/etc/letsencrypt/live/example.com/fullchain.pem</span>
+  <span class="hljs-attr">SSLCertificateKeyFile</span> <span class="hljs-string">/etc/letsencrypt/live/example.com/privkey.pem</span>
+  <span class="hljs-attr">Include</span> <span class="hljs-string">/etc/letsencrypt/options-ssl-apache.conf</span>
+
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/docs/git-bitbucket"><span class="arrow-prev">← </span><span>Git &amp; Bitbucket</span></a><a class="docs-next button" href="/docs/docs/apache-modules"><span>Load essential apache modules</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#concept">Concept</a></li><li><a href="#install-node--npm">Install Node &amp; NPM</a></li><li><a href="#setup">Setup</a></li><li><a href="#install-pm2">Install PM2</a><ul class="toc-headings"><li><a href="#start-application">Start Application</a></li><li><a href="#other-pm2-usage">Other PM2 Usage</a></li></ul></li><li><a href="#lets-encrypt--node">Lets' Encrypt + node</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2020 By Michiel Vandewalle</section></footer></div></body></html>

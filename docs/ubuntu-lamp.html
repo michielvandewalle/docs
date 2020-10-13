@@ -1,0 +1,135 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Install LAMP stack · Docs</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="LAMP Stack is the group of services that work together in order to serve the dynamic websites and web apps. The LAMP stack can be installed and configured on almost all Linux variants such as Amazon Linux, Ubuntu, Red Hat, and Fedora."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Install LAMP stack · Docs"/><meta property="og:type" content="website"/><meta property="og:url" content="https://github.com/michielvandewalle/docs/"/><meta property="og:description" content="LAMP Stack is the group of services that work together in order to serve the dynamic websites and web apps. The LAMP stack can be installed and configured on almost all Linux variants such as Amazon Linux, Ubuntu, Red Hat, and Fedora."/><meta property="og:image" content="https://github.com/michielvandewalle/docs/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://github.com/michielvandewalle/docs/img/docusaurus.png"/><link rel="shortcut icon" href="/docs/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="/css/code-block-buttons.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script><script type="text/javascript" src="/js/code-block-buttons.js"></script><script src="/docs/js/scrollSpy.js"></script><link rel="stylesheet" href="/docs/css/main.css"/><script src="/docs/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/docs/"><img class="logo" src="/docs/img/docusaurus.svg" alt="Docs"/><h2 class="headerTitleWithLogo">Docs</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"></ul></nav></div></header></div></div><div class="navPusher singleRowMobileNav"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Server setup</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Server setup</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/docs/docs/ubuntu-lamp">LAMP stack</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/apache-virtual-hosts">Setup Apache Virtual Hosts</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/apache-letsencrypt">SSL with Let&#x27;s Encrypt</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/git-bitbucket">Git &amp; Bitbucket</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/apache-node">Node.js on Apache Server</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/apache-modules">Load essential apache modules</a></li><li class="navListItem"><a class="navItem" href="/docs/docs/composer">Composer</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Frontend</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/docs/frontend-gulp">Frontend workflow</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Command line</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/docs/commandline">Command line</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Mac setup</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/docs/mac-setup">Mac setup</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Install LAMP stack</h1></header><article><div><span><p>LAMP Stack is the group of services that work together in order to serve the dynamic websites and web apps. The LAMP stack can be installed and configured on almost all Linux variants such as Amazon Linux, Ubuntu, Red Hat, and Fedora.</p>
+<ul>
+<li>L = Linux as the operating system platform.</li>
+<li>A = Apache as the Web server</li>
+<li>M = MySQL as the database server</li>
+<li>P = PHP as the supportive language</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="install-apache"></a><a href="#install-apache" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Install Apache</h2>
+<p>Execute the following commands to update the existing packages and install the Apache packages.</p>
+<pre><code class="hljs css language-shell">sudo apt-get update -y
+sudo apt-get install apache2 -y
+</code></pre>
+<p>Ensure that apache service is running properly. If not, start it manually by executing the following commands:</p>
+<pre><code class="hljs css language-shell">sudo service apache2 status
+sudo service apache2 restart
+</code></pre>
+<p>Once you have installed the Apache server and tested that the service is running properly, type the following URL on a Web browser to test that Web server is functioning properly.</p>
+<p><code>http://server-ip-address</code></p>
+<p>The default page of Apache web server should be displayed as shown in the following figure.</p>
+<p><img src="https://assets.digitalocean.com/articles/lamp_1404/default_apache.png" alt="default-apache"></p>
+<h2><a class="anchor" aria-hidden="true" id="install-mysql"></a><a href="#install-mysql" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Install MySQL</h2>
+<p>MySQL is a database service that organizes and provides access to databases where your website can store information. To install MySQL on Ubuntu machine, use the following steps.</p>
+<pre><code class="hljs css language-shell">sudo apt-get install mysql-server mysql-client mysql-common php-mysql
+</code></pre>
+<p>The MySQL installation will begin and you would be asked to set the MySQL root password as shown in the following figure. Set the desired MySQL root password and complete the installation.</p>
+<p><img src="https://i1.wp.com/protechgurus.com/wp-content/uploads/2017/05/word-image-2.png?w=562&amp;ssl=1" alt="configure-mysql-login"></p>
+<p>After completing the MySQL installation, execute the following command to create database directory structure where MySQL will store its information.</p>
+<pre><code class="hljs css language-shell">sudo mysqld --initialize
+</code></pre>
+<p>The default installation of MySQL has some security holes. Use the following command to enhance MySQL database security.</p>
+<pre><code class="hljs css language-shell">sudo mysql_secure_installation
+</code></pre>
+<p>Follow the on-screen instructions, read each of the displayed settings options and understand what impact these settings will have.</p>
+<pre><code class="hljs css language-shell">Remove anonymous users? Y
+Disallow root login remotely? n
+Remove test database and access to it? Y
+Reload privilege tables now? Y
+</code></pre>
+<p>Enable root login for phpMyAdmin or for external login.</p>
+<pre><code class="hljs">sudo mysql
+ALTER<span class="hljs-built_in"> USER </span><span class="hljs-string">'root'</span>@<span class="hljs-string">'localhost'</span> IDENTIFIED WITH mysql_native_password BY <span class="hljs-string">'yourpassword'</span>;
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="install-php"></a><a href="#install-php" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Install PHP</h2>
+<p>PHP stands for Personal Home Page is a scripting language used in web designing. To install PHP and its required packages on Ubuntu, use the following command:</p>
+<pre><code class="hljs">sudo apt-<span class="hljs-builtin-name">get</span> install phpmyadmin php-mbstring php-gettext
+</code></pre>
+<p>On the Web server selection screen, select Apache2 as the web server and complete the installation.</p>
+<p><img src="https://i1.wp.com/protechgurus.com/wp-content/uploads/2017/05/word-image-4.png?w=569&amp;ssl=1" alt="configure-phpmyadmin-apache"></p>
+<p>On the Configuring phpmyadmin screen, click <strong>Yes</strong> and specify a PHPMyAdmin password.</p>
+<p><img src="https://i2.wp.com/protechgurus.com/wp-content/uploads/2017/05/word-image-5.png?w=590&amp;ssl=1" alt="configure-phpmyadmin-login"></p>
+<p>Now, execute the following commands to adjust the PHP settings:</p>
+<pre><code class="hljs css language-shell">sudo phpenmod mbstring
+sudo phpenmod mcrypt
+</code></pre>
+<p>Finally, use the following command to restart the Apache server.</p>
+<pre><code class="hljs css language-shell">sudo service apache2 restart
+</code></pre>
+<p>If you having trouble login in to the mysql through phpMyAdmin. Probably has to do with one of these packages we just installed. Make sure they are enabled.</p>
+<p>Now, if you test your default web server page, you will get the content of the index.html file. However, we need to change it as we want to serve dynamic web pages using PHP components. To achieve this, you need to modify the dir.conf file using the following command.</p>
+<pre><code class="hljs css language-shell">sudo nano /etc/apache2/mods-enabled/dir.conf
+</code></pre>
+<p>In the dir.conf file, change the order of index directory by placing index.php before of all the other index files as shown in the following figure.</p>
+<p><img src="https://i0.wp.com/protechgurus.com/wp-content/uploads/2017/05/word-image-6.png?w=618&amp;ssl=1" alt="configure-apache-order"></p>
+<p>Now, your (L)inux (A)pache (M)ySQL and (P)HP = LAMP stack is installed and configured successfully.</p>
+<h2><a class="anchor" aria-hidden="true" id="testing"></a><a href="#testing" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Testing</h2>
+<p>To test and validate that your Apache, MySQL, and PHP services are working properly, you can create a PHP test script under the web server directory that is /var/www/html in Ubuntu Linux. Use the following command to create the PHP test script and write the script code as given below.</p>
+<pre><code class="hljs css language-shell">sudo nano /var/www/html/test.php
+&lt;?php phpinfo(); ?&gt;
+</code></pre>
+<p>Save the test.php file and restart the apache service.</p>
+<pre><code class="hljs css language-shell">sudo service apache2 restart
+</code></pre>
+<p>To confirm that all your configuration is done successfully, test each of LAMP service using the following URLs.</p>
+<ul>
+<li>Web server test URL: <a href="http://server-ip-address">http://server-ip-address</a></li>
+<li>PHP script test URL: <a href="http://server-ip-address/test.php">http://server-ip-address/test.php</a></li>
+<li>PHPMyAdmin test URL: <a href="http://server-ip-address/phpmyadmin">http://server-ip-address/phpmyadmin</a></li>
+</ul>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-next button" href="/docs/docs/apache-virtual-hosts"><span>Setup Apache Virtual Hosts</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#install-apache">Install Apache</a></li><li><a href="#install-mysql">Install MySQL</a></li><li><a href="#install-php">Install PHP</a></li><li><a href="#testing">Testing</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2020 By Michiel Vandewalle</section></footer></div></body></html>
